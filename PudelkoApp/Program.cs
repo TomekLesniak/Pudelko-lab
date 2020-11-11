@@ -1,4 +1,5 @@
 ﻿using System;
+using PudelkoLib;
 
 namespace PudelkoApp
 {
@@ -6,7 +7,10 @@ namespace PudelkoApp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var pudelko = new Pudelko(159, 100.0, 100.0, UnitOfMeasure.Centimeter);
+            Console.WriteLine(pudelko.Dlugosc);
+            Console.WriteLine(pudelko.Szerokosc);
+            Console.WriteLine(pudelko.Wysokosc);
         }
     }
 }

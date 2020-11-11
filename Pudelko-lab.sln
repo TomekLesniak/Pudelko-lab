@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PudelkoApp", "PudelkoApp\PudelkoApp.csproj", "{8D64AFB7-C91A-4281-9360-28CE631D6537}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7156E583-0B8B-4868-B504-24D5B64530AC} = {7156E583-0B8B-4868-B504-24D5B64530AC}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pudelko-UnitTests", "Pudelko-UnitTests\Pudelko-UnitTests.csproj", "{330F6A7B-27D9-48BA-99C4-17A3AC4C6B76}"
 EndProject

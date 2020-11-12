@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Globalization;
 using System.Text;
 using Console = System.Console;
@@ -77,6 +78,9 @@ namespace PudelkoLib
 
             return p1.Equals(p2);
         }
+
+        public static bool operator ==(Pudelko p1, Pudelko p2) => Equals(p1, p2);
+        public static bool operator !=(Pudelko p1, Pudelko p2) => !(p1 == p2);
 
         public override int GetHashCode()
         {

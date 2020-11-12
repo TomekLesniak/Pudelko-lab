@@ -7,10 +7,8 @@ namespace PudelkoApp
     {
         static void Main(string[] args)
         {
-            var pudelko = new Pudelko(159, 100.0, 100.0, UnitOfMeasure.Centimeter);
-            Console.WriteLine(pudelko.Dlugosc);
-            Console.WriteLine(pudelko.Szerokosc);
-            Console.WriteLine(pudelko.Wysokosc);
+            var pudelko = new Pudelko(2.5, 9.321, 0.1, UnitOfMeasure.Meter);
+            Console.WriteLine(pudelko.ToString("mm"));
         }
     }
 }

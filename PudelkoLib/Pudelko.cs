@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using Console = System.Console;
 
 namespace PudelkoLib
 {
-    public sealed class Pudelko : IFormattable
+    public sealed class Pudelko : IFormattable, IEquatable<Pudelko>
     {
         private readonly double _dlugosc;
         private readonly double _szerokosc;
@@ -15,6 +16,10 @@ namespace PudelkoLib
         public double Dlugosc => Math.Round(UnitConverter.ToMeter(_dlugosc, _jednostkaMiary), 3);
         public double Szerokosc => Math.Round(UnitConverter.ToMeter(_szerokosc, _jednostkaMiary), 3);
         public double Wysokosc => Math.Round(UnitConverter.ToMeter(_wysokosc, _jednostkaMiary), 3);
+        public double Objetosc => Math.Round(Dlugosc * Szerokosc * Wysokosc, 9);
+
+        public double Pole =>
+            Math.Round((2 * Dlugosc * Szerokosc) + (2 * Dlugosc * Wysokosc) + (2 * Szerokosc * Wysokosc), 6);
 
         public Pudelko(double dlugosc = 0.1, double szerokosc = 0.1, double wysokosc = 0.1, 
             UnitOfMeasure jednostkaMiary = UnitOfMeasure.Meter)
@@ -41,6 +46,41 @@ namespace PudelkoLib
                 return true;
 
             return false;
+        }
+
+        public bool Equals(Pudelko other)
+        {
+            if (other is null)
+                return false;
+            if (ReferenceEquals(this, other))
+                return true;
+
+            //todo: Sprawdzic czy boki sa identyczne
+            return false;
+
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Pudelko)
+                return Equals((Pudelko) obj);
+
+            return false;
+        }
+
+        public static bool Equals(Pudelko p1, Pudelko p2)
+        {
+            if (p1 == null && p2 == null)
+                return true;
+            if (p1 is null) 
+                return false;
+
+            return p1.Equals(p2);
+        }
+
+        public override int GetHashCode()
+        {
+            return (_dlugosc, _szerokosc, _wysokosc, _jednostkaMiary).GetHashCode();
         }
 
         public override string ToString()

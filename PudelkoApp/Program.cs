@@ -9,6 +9,7 @@ namespace PudelkoApp
         {
             var pudelko = new Pudelko(2.5, 9.321, 0.1, UnitOfMeasure.Meter);
             Console.WriteLine(pudelko.ToString("mm"));
+            Console.WriteLine(pudelko.Pole);
         }
     }
 }

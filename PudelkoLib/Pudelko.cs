@@ -15,38 +15,52 @@ namespace PudelkoLib
         private readonly double _wysokosc;
         private readonly UnitOfMeasure _jednostkaMiary;
 
-        public double Dlugosc => Math.Round(UnitConverter.ToMeter(_dlugosc, _jednostkaMiary), 3);
-        public double Szerokosc => Math.Round(UnitConverter.ToMeter(_szerokosc, _jednostkaMiary), 3);
-        public double Wysokosc => Math.Round(UnitConverter.ToMeter(_wysokosc, _jednostkaMiary), 3);
+        public double Dlugosc => Math.Round(_dlugosc, 4);
+        public double Szerokosc => Math.Round(_szerokosc, 4);
+        public double Wysokosc => Math.Round(_wysokosc, 4);
         public double Objetosc => Math.Round(Dlugosc * Szerokosc * Wysokosc, 9);
 
         public double Pole =>
             Math.Round((2 * Dlugosc * Szerokosc) + (2 * Dlugosc * Wysokosc) + (2 * Szerokosc * Wysokosc), 6);
 
-        public Pudelko(double dlugosc = 0.1, double szerokosc = 0.1, double wysokosc = 0.1,
-            UnitOfMeasure jednostkaMiary = UnitOfMeasure.Meter)
+        public Pudelko()
         {
-            if (IsExceedingBoxSize(dlugosc, szerokosc, wysokosc, jednostkaMiary))
+            _dlugosc = 0.1;
+            _szerokosc = 0.1;
+            _wysokosc = 0.1;
+            _jednostkaMiary = UnitOfMeasure.Meter;
+        }
+
+        public Pudelko(double dlugosc, UnitOfMeasure jednostkaMiary = UnitOfMeasure.Meter) : this()
+        {
+            _dlugosc = UnitConverter.ToMeter(dlugosc, jednostkaMiary);
+            if (IsExceedingBoxSize(_dlugosc))
                 throw new ArgumentOutOfRangeException();
 
-
-            _dlugosc = dlugosc;
-            _szerokosc = szerokosc;
-            _wysokosc = wysokosc;
             _jednostkaMiary = jednostkaMiary;
         }
 
-        private bool IsExceedingBoxSize(double dlugosc, double szerokosc, double wysokosc, UnitOfMeasure jednostkaMiary)
+        public Pudelko(double dlugosc, double szerokosc, UnitOfMeasure jednostkaMiary = UnitOfMeasure.Meter) : this(dlugosc, jednostkaMiary)
         {
-            if (dlugosc <= 0 || szerokosc <= 0 || wysokosc <= 0)
-                return true;
-            if (jednostkaMiary == UnitOfMeasure.Meter && (dlugosc > 10.0 || szerokosc > 10.0 || wysokosc > 10.0))
-                return true;
-            if (jednostkaMiary == UnitOfMeasure.Centimeter &&
-                (dlugosc > 1000.0 || szerokosc > 1000.0 || wysokosc > 1000.0))
-                return true;
-            if (jednostkaMiary == UnitOfMeasure.Millimeter &&
-                (dlugosc > 10000.0 || szerokosc > 10000.0 || wysokosc > 10000.0))
+            _szerokosc = UnitConverter.ToMeter(szerokosc, jednostkaMiary);
+            if (IsExceedingBoxSize(_szerokosc))
+                throw new ArgumentOutOfRangeException();
+        }
+
+        public Pudelko(double dlugosc , double szerokosc, double wysokosc,
+            UnitOfMeasure jednostkaMiary = UnitOfMeasure.Meter) : this(dlugosc, szerokosc, jednostkaMiary)
+        {
+            _wysokosc = UnitConverter.ToMeter(wysokosc, jednostkaMiary);
+            if (IsExceedingBoxSize(_wysokosc))
+                throw new ArgumentOutOfRangeException();
+
+        }
+
+        private bool IsExceedingBoxSize(double value)
+        {
+            const double minBoxDimension = 0.0001;
+            const double maxBoxDimension = 10.0;
+            if (value < minBoxDimension || value > maxBoxDimension)
                 return true;
 
             return false;
@@ -70,6 +84,7 @@ namespace PudelkoLib
             }
 
             return true;
+
         }
 
         public override bool Equals(object obj)
@@ -123,21 +138,21 @@ namespace PudelkoLib
             {
                 case "m":
                     unitFormat = "0.000";
-                    dlugosc = UnitConverter.ToMeter(_dlugosc, _jednostkaMiary);
-                    szerokosc = UnitConverter.ToMeter(_szerokosc, _jednostkaMiary);
-                    wysokosc = UnitConverter.ToMeter(_wysokosc, _jednostkaMiary);
+                    dlugosc = Dlugosc;
+                    szerokosc = Szerokosc;
+                    wysokosc = Wysokosc;
                     break;
                 case "cm":
                     unitFormat = "##0.0";
-                    dlugosc = UnitConverter.ToCentimeter(_dlugosc, _jednostkaMiary);
-                    szerokosc = UnitConverter.ToCentimeter(_szerokosc, _jednostkaMiary);
-                    wysokosc = UnitConverter.ToCentimeter(_wysokosc, _jednostkaMiary);
+                    dlugosc = UnitConverter.ToCentimeter(_dlugosc);
+                    szerokosc = UnitConverter.ToCentimeter(_szerokosc);
+                    wysokosc = UnitConverter.ToCentimeter(_wysokosc);
                     break;
                 case "mm":
                     unitFormat = "####";
-                    dlugosc = UnitConverter.ToMillimeter(_dlugosc, _jednostkaMiary);
-                    szerokosc = UnitConverter.ToMillimeter(_szerokosc, _jednostkaMiary);
-                    wysokosc = UnitConverter.ToMillimeter(_wysokosc, _jednostkaMiary);
+                    dlugosc = UnitConverter.ToMillimeter(_dlugosc);
+                    szerokosc = UnitConverter.ToMillimeter(_szerokosc);
+                    wysokosc = UnitConverter.ToMillimeter(_wysokosc);
                     break;
             }
 

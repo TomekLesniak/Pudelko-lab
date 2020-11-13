@@ -183,5 +183,47 @@ namespace PudelkoLib
             return $"{dlugosc.ToString(unitFormat, provider)} {format} × {szerokosc.ToString(unitFormat, provider)}" +
                    $" {format} × {wysokosc.ToString(unitFormat, provider)} {format}";
         }
+
+        public static Pudelko Parse(string input)
+        {
+            var parts = input.Split(' ');
+            try
+            {
+                double[] dimensions = {double.Parse(parts[0]), double.Parse(parts[3]), double.Parse(parts[6])};
+                string[] units = {parts[1], parts[4], parts[7]};
+                var unitOfMeasure = GetUnitOfMeasure(units);
+                return new Pudelko(dimensions[0], dimensions[1], dimensions[2], unitOfMeasure);
+            }
+            catch
+            {
+                throw new FormatException("Can`t parse - Wrong format");
+            }
+        }
+
+        private static UnitOfMeasure GetUnitOfMeasure(string[] units)
+        {
+            if (units.Length != 0)
+            {
+                var pickedUnit = units[0];
+                foreach (var unit in units)
+                {
+                    if (pickedUnit != unit)
+                        throw new FormatException("Wrong format");
+                }
+            }
+
+            var unitOfMeasure = units[0];
+            switch(unitOfMeasure)
+            {
+                case "m":
+                    return UnitOfMeasure.Meter;
+                case "cm":
+                    return UnitOfMeasure.Centimeter;
+                case "mm":
+                    return UnitOfMeasure.Millimeter;
+                default:
+                    throw new FormatException("Wrong format");
+            };
+        }
     }
 }

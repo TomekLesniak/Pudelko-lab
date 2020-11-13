@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Globalization;
@@ -8,7 +9,7 @@ using Console = System.Console;
 
 namespace PudelkoLib
 {
-    public sealed class Pudelko : IFormattable, IEquatable<Pudelko>
+    public sealed class Pudelko : IFormattable, IEquatable<Pudelko>, IEnumerable<double>
     {
         private readonly double _dlugosc;
         private readonly double _szerokosc;
@@ -124,6 +125,17 @@ namespace PudelkoLib
             _ => throw new ArgumentOutOfRangeException()
         };
 
+        public IEnumerator<double> GetEnumerator()
+        {
+            yield return Dlugosc;
+            yield return Szerokosc;
+            yield return Wysokosc;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         public override string ToString()
         {

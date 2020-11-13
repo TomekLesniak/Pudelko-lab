@@ -2,6 +2,9 @@
 {
     public static class UnitConverter
     {
+        public static double ToCentimeter(double value) => value * 100;
+        public static double ToMillimeter(double value) => value * 1000;
+
         public static double ToMeter(double value, UnitOfMeasure currentUnitMeasure)
         {
             if (currentUnitMeasure == UnitOfMeasure.Millimeter)
@@ -16,8 +19,5 @@
 
             return value;
         }
-
-        public static double ToCentimeter(double value) => value * 100;
-        public static double ToMillimeter(double value) => value * 1000;
     }
 }

@@ -53,7 +53,6 @@ namespace PudelkoLib
             _wysokosc = UnitConverter.ToMeter(wysokosc, jednostkaMiary);
             if (IsExceedingBoxSize(_wysokosc))
                 throw new ArgumentOutOfRangeException();
-
         }
 
         private bool IsExceedingBoxSize(double value)
@@ -84,7 +83,6 @@ namespace PudelkoLib
             }
 
             return true;
-
         }
 
         public override bool Equals(object obj)
@@ -105,13 +103,27 @@ namespace PudelkoLib
             return p1.Equals(p2);
         }
 
-        public static bool operator ==(Pudelko p1, Pudelko p2) => Equals(p1, p2);
-        public static bool operator !=(Pudelko p1, Pudelko p2) => !(p1 == p2);
-
         public override int GetHashCode()
         {
             return (_dlugosc, _szerokosc, _wysokosc, _jednostkaMiary).GetHashCode();
         }
+
+        public static bool operator ==(Pudelko p1, Pudelko p2) => Equals(p1, p2);
+        public static bool operator !=(Pudelko p1, Pudelko p2) => !(p1 == p2);
+
+        public static Pudelko operator +(Pudelko p1, Pudelko p2)
+        {
+            return new Pudelko();
+        }
+
+        public double this[int i] => i switch
+        {
+            0 => Dlugosc,
+            1 => Szerokosc,
+            2 => Wysokosc,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
 
         public override string ToString()
         {

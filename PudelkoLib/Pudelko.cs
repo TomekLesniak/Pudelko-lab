@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using Console = System.Console;
 
@@ -22,12 +23,12 @@ namespace PudelkoLib
         public double Pole =>
             Math.Round((2 * Dlugosc * Szerokosc) + (2 * Dlugosc * Wysokosc) + (2 * Szerokosc * Wysokosc), 6);
 
-        public Pudelko(double dlugosc = 0.1, double szerokosc = 0.1, double wysokosc = 0.1, 
+        public Pudelko(double dlugosc = 0.1, double szerokosc = 0.1, double wysokosc = 0.1,
             UnitOfMeasure jednostkaMiary = UnitOfMeasure.Meter)
         {
-            if(IsExceedingBoxSize(dlugosc, szerokosc, wysokosc, jednostkaMiary))
+            if (IsExceedingBoxSize(dlugosc, szerokosc, wysokosc, jednostkaMiary))
                 throw new ArgumentOutOfRangeException();
-            
+
 
             _dlugosc = dlugosc;
             _szerokosc = szerokosc;
@@ -37,13 +38,15 @@ namespace PudelkoLib
 
         private bool IsExceedingBoxSize(double dlugosc, double szerokosc, double wysokosc, UnitOfMeasure jednostkaMiary)
         {
-            if(dlugosc <= 0 || szerokosc <= 0 || wysokosc <= 0)
+            if (dlugosc <= 0 || szerokosc <= 0 || wysokosc <= 0)
                 return true;
             if (jednostkaMiary == UnitOfMeasure.Meter && (dlugosc > 10.0 || szerokosc > 10.0 || wysokosc > 10.0))
                 return true;
-            if  (jednostkaMiary == UnitOfMeasure.Centimeter && (dlugosc > 1000.0 || szerokosc > 1000.0 || wysokosc > 1000.0))
+            if (jednostkaMiary == UnitOfMeasure.Centimeter &&
+                (dlugosc > 1000.0 || szerokosc > 1000.0 || wysokosc > 1000.0))
                 return true;
-            if (jednostkaMiary == UnitOfMeasure.Millimeter && (dlugosc > 10000.0 || szerokosc > 10000.0 || wysokosc > 10000.0))
+            if (jednostkaMiary == UnitOfMeasure.Millimeter &&
+                (dlugosc > 10000.0 || szerokosc > 10000.0 || wysokosc > 10000.0))
                 return true;
 
             return false;
@@ -56,9 +59,17 @@ namespace PudelkoLib
             if (ReferenceEquals(this, other))
                 return true;
 
-            //todo: Sprawdzic czy boki sa identyczne
-            return false;
+            double[] pudelkoJeden = {Dlugosc, Szerokosc, Wysokosc};
+            double[] pudelkoDwa = {other.Dlugosc, other.Szerokosc, other.Wysokosc};
+            Array.Sort(pudelkoJeden);
+            Array.Sort(pudelkoDwa);
+            for (var i = 0; i < pudelkoJeden.Length; i++)
+            {
+                if (Math.Abs(pudelkoJeden[i] - pudelkoDwa[i]) > 0.001)
+                    return false;
+            }
 
+            return true;
         }
 
         public override bool Equals(object obj)

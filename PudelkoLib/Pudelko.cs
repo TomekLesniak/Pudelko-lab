@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using Console = System.Console;
+using System.Runtime.CompilerServices;
 
 namespace PudelkoLib
 {
@@ -20,7 +17,6 @@ namespace PudelkoLib
         public double Szerokosc => Math.Round(_szerokosc, 4);
         public double Wysokosc => Math.Round(_wysokosc, 4);
         public double Objetosc => Math.Round(Dlugosc * Szerokosc * Wysokosc, 9);
-
         public double Pole =>
             Math.Round((2 * Dlugosc * Szerokosc) + (2 * Dlugosc * Wysokosc) + (2 * Szerokosc * Wysokosc), 6);
 
@@ -60,7 +56,7 @@ namespace PudelkoLib
         {
             const double minBoxDimension = 0.0001;
             const double maxBoxDimension = 10.0;
-            if (value < minBoxDimension || value > maxBoxDimension)
+            if (value <= minBoxDimension || value > maxBoxDimension)
                 return true;
 
             return false;
@@ -111,7 +107,8 @@ namespace PudelkoLib
 
         public static bool operator ==(Pudelko p1, Pudelko p2) => Equals(p1, p2);
         public static bool operator !=(Pudelko p1, Pudelko p2) => !(p1 == p2);
-
+        public static implicit operator double[](Pudelko p) => new double[] {p.Dlugosc, p.Szerokosc, p.Wysokosc};
+        public static explicit operator Pudelko(ValueTuple<double, double, double> tuple) => new Pudelko(tuple.Item1, tuple.Item2, tuple.Item3, UnitOfMeasure.Millimeter);
         public static Pudelko operator +(Pudelko p1, Pudelko p2)
         {
             return new Pudelko();
@@ -178,6 +175,8 @@ namespace PudelkoLib
                     szerokosc = UnitConverter.ToMillimeter(_szerokosc);
                     wysokosc = UnitConverter.ToMillimeter(_wysokosc);
                     break;
+                default:
+                    throw new FormatException();
             }
 
             return $"{dlugosc.ToString(unitFormat, provider)} {format} × {szerokosc.ToString(unitFormat, provider)}" +
@@ -196,7 +195,7 @@ namespace PudelkoLib
             }
             catch
             {
-                throw new FormatException("Can`t parse - Wrong format");
+                throw new FormatException();
             }
         }
 

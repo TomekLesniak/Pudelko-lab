@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Security.Cryptography;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PudelkoLib;
@@ -28,9 +29,9 @@ namespace Pudelko_UnitTests
 
         private void AssertPudelko(Pudelko p, double expectedA, double expectedB, double expectedC)
         {
-            Assert.AreEqual(expectedA, p.Dlugosc, delta: accuracy);
-            Assert.AreEqual(expectedB, p.Szerokosc, delta: accuracy);
-            Assert.AreEqual(expectedC, p.Wysokosc, delta: accuracy);
+            Assert.AreEqual(expectedA, p.A, delta: accuracy);
+            Assert.AreEqual(expectedB, p.B, delta: accuracy);
+            Assert.AreEqual(expectedC, p.C, delta: accuracy);
         }
 
         [DataTestMethod, TestCategory("Constructors")]
@@ -142,9 +143,9 @@ namespace Pudelko_UnitTests
         {
             Pudelko p = new Pudelko(a);
 
-            Assert.AreEqual(a, p.Dlugosc);
-            Assert.AreEqual(0.1, p.Szerokosc);
-            Assert.AreEqual(0.1, p.Wysokosc);
+            Assert.AreEqual(a, p.A);
+            Assert.AreEqual(0.1, p.B);
+            Assert.AreEqual(0.1, p.C);
         }
 
         [DataTestMethod, TestCategory("Constructors")]
@@ -153,9 +154,9 @@ namespace Pudelko_UnitTests
         {
             Pudelko p = new Pudelko(a);
 
-            Assert.AreEqual(a, p.Dlugosc);
-            Assert.AreEqual(0.1, p.Szerokosc);
-            Assert.AreEqual(0.1, p.Wysokosc);
+            Assert.AreEqual(a, p.A);
+            Assert.AreEqual(0.1, p.B);
+            Assert.AreEqual(0.1, p.C);
         }
 
         [DataTestMethod, TestCategory("Constructors")]
@@ -429,6 +430,105 @@ namespace Pudelko_UnitTests
             var p = new Pudelko(1);
             var stringformatedrepreentation = p.ToString("wrong code");
         }
+
+        #endregion
+
+
+        #region Pole, Objêtoœæ ===================================
+        [DataTestMethod, TestCategory("Calculated properties")]
+        [DataRow(1.0, 1.0, 1.0, 6.0)]
+        [DataRow(2.5, 1.2, 2.3, 23.02)]
+        [DataRow(1.3, 9.92, 3.32, 100.2928)]
+        public void Area_DataInMeters_ReturnsCalculatedAreaInMeters(double a, double b, double c, double expectedArea)
+        {
+            var p = new Pudelko(a, b, c);
+
+            Assert.AreEqual(p.Pole, expectedArea);
+        }
+
+        [DataTestMethod, TestCategory("Calculated properties")]
+        [DataRow(100.0, 200.0, 300.0, 22.0)]
+        [DataRow(250.0, 120.0, 230.0, 23.02)]
+        [DataRow(130.0, 992.0, 332.0, 100.2928)]
+        public void Area_DataInCentimeters_ReturnsCalculatedAreaInMeters(double a, double b, double c,
+            double expectedArea)
+        {
+            var p = new Pudelko(a, b, c, UnitOfMeasure.Centimeter);
+
+            Assert.AreEqual(p.Pole, expectedArea);
+        }
+
+        [DataTestMethod, TestCategory("Calculated properties")]
+        [DataRow(1000.0, 2000.0, 3000.0, 22.0)]
+        [DataRow(2500.0, 1200.0, 2300.0, 23.02)]
+        [DataRow(1300.0, 9920.0, 3320.0, 100.2928)]
+        public void Area_DataInMillimeters_ReturnsCalculatedAreaInMeters(double a, double b, double c,
+            double expectedArea)
+        {
+            var p = new Pudelko(a, b, c, UnitOfMeasure.Millimeter);
+
+            Assert.AreEqual(p.Pole, expectedArea);
+        }
+        #endregion
+
+        #region Equals ===========================================
+        // ToDo
+        #endregion
+
+        #region Operators overloading ===========================
+        // ToDo
+        #endregion
+
+        #region Conversions =====================================
+        [TestMethod]
+        public void ExplicitConversion_ToDoubleArray_AsMeters()
+        {
+            var p = new Pudelko(1, 2.1, 3.231);
+            double[] tab = (double[])p;
+            Assert.AreEqual(3, tab.Length);
+            Assert.AreEqual(p.A, tab[0]);
+            Assert.AreEqual(p.B, tab[1]);
+            Assert.AreEqual(p.C, tab[2]);
+        }
+
+        [TestMethod]
+        public void ImplicitConversion_FromAalueTuple_As_Pudelko_InMilimeters()
+        {
+            var (a, b, c) = (2500, 9321, 100); // in milimeters, ValueTuple
+            Pudelko p =(Pudelko)(a, b, c);
+            Assert.AreEqual((int)(p.A * 1000), a);
+            Assert.AreEqual((int)(p.B * 1000), b);
+            Assert.AreEqual((int)(p.C * 1000), c);
+        }
+
+        #endregion
+
+        #region Indexer, enumeration ============================
+        [TestMethod]
+        public void Indexer_ReadFrom()
+        {
+            var p = new Pudelko(1, 2.1, 3.231);
+            Assert.AreEqual(p.A, p[0]);
+            Assert.AreEqual(p.B, p[1]);
+            Assert.AreEqual(p.C, p[2]);
+        }
+
+        [TestMethod]
+        public void ForEach_Test()
+        {
+            var p = new Pudelko(1, 2.1, 3.231);
+            var tab = new[] { p.A, p.B, p.C };
+            int i = 0;
+            foreach (double x in p)
+            {
+                Assert.AreEqual(x, tab[i]);
+                i++;
+            }
+        }
+
+        #endregion
+
+        #region Parsing =========================================
 
         #endregion
 

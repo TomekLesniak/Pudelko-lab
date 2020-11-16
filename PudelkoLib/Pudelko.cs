@@ -13,12 +13,12 @@ namespace PudelkoLib
         private readonly double _wysokosc;
         private readonly UnitOfMeasure _jednostkaMiary;
 
-        public double Dlugosc => Math.Round(_dlugosc, 4);
-        public double Szerokosc => Math.Round(_szerokosc, 4);
-        public double Wysokosc => Math.Round(_wysokosc, 4);
-        public double Objetosc => Math.Round(Dlugosc * Szerokosc * Wysokosc, 9);
+        public double A => Math.Round(_dlugosc, 4);
+        public double B => Math.Round(_szerokosc, 4);
+        public double C => Math.Round(_wysokosc, 4);
+        public double Objetosc => Math.Round(A * B * C, 9);
         public double Pole =>
-            Math.Round((2 * Dlugosc * Szerokosc) + (2 * Dlugosc * Wysokosc) + (2 * Szerokosc * Wysokosc), 6);
+            Math.Round((2 * A * B) + (2 * A * C) + (2 * B * C), 6);
 
         public Pudelko()
         {
@@ -52,16 +52,6 @@ namespace PudelkoLib
                 throw new ArgumentOutOfRangeException();
         }
 
-        private bool IsExceedingBoxSize(double value)
-        {
-            const double minBoxDimension = 0.0001;
-            const double maxBoxDimension = 10.0;
-            if (value <= minBoxDimension || value > maxBoxDimension)
-                return true;
-
-            return false;
-        }
-
         public bool Equals(Pudelko other)
         {
             if (other is null)
@@ -69,8 +59,8 @@ namespace PudelkoLib
             if (ReferenceEquals(this, other))
                 return true;
 
-            double[] pudelkoJeden = {Dlugosc, Szerokosc, Wysokosc};
-            double[] pudelkoDwa = {other.Dlugosc, other.Szerokosc, other.Wysokosc};
+            double[] pudelkoJeden = {A, B, C};
+            double[] pudelkoDwa = {other.A, other.B, other.C};
             Array.Sort(pudelkoJeden);
             Array.Sort(pudelkoDwa);
             for (var i = 0; i < pudelkoJeden.Length; i++)
@@ -107,7 +97,7 @@ namespace PudelkoLib
 
         public static bool operator ==(Pudelko p1, Pudelko p2) => Equals(p1, p2);
         public static bool operator !=(Pudelko p1, Pudelko p2) => !(p1 == p2);
-        public static implicit operator double[](Pudelko p) => new double[] {p.Dlugosc, p.Szerokosc, p.Wysokosc};
+        public static implicit operator double[](Pudelko p) => new double[] {p.A, p.B, p.C};
         public static explicit operator Pudelko(ValueTuple<double, double, double> tuple) => new Pudelko(tuple.Item1, tuple.Item2, tuple.Item3, UnitOfMeasure.Millimeter);
         public static Pudelko operator +(Pudelko p1, Pudelko p2)
         {
@@ -118,27 +108,26 @@ namespace PudelkoLib
             Array.Sort(firstBox);
             Array.Sort(secondBox);
 
-            forBoth[0] = firstBox[0] + secondBox[0];
+            forBoth[0] = firstBox[0] + secondBox[0]; 
             forBoth[1] = secondBox[1] > firstBox[1] ? secondBox[1] : firstBox[1];
             forBoth[2] = secondBox[2] > firstBox[2] ? secondBox[2] : firstBox[2];
 
             return new Pudelko(forBoth[0], forBoth[1], forBoth[2]);
         }
 
-
         public double this[int i] => i switch
         {
-            0 => Dlugosc,
-            1 => Szerokosc,
-            2 => Wysokosc,
+            0 => A,
+            1 => B,
+            2 => C,
             _ => throw new ArgumentOutOfRangeException()
         };
 
         public IEnumerator<double> GetEnumerator()
         {
-            yield return Dlugosc;
-            yield return Szerokosc;
-            yield return Wysokosc;
+            yield return A;
+            yield return B;
+            yield return C;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -171,9 +160,9 @@ namespace PudelkoLib
             {
                 case "m":
                     unitFormat = "0.000";
-                    dlugosc = Dlugosc;
-                    szerokosc = Szerokosc;
-                    wysokosc = Wysokosc;
+                    dlugosc = A;
+                    szerokosc = B;
+                    wysokosc = C;
                     break;
                 case "cm":
                     unitFormat = "##0.0";
@@ -209,6 +198,13 @@ namespace PudelkoLib
             {
                 throw new FormatException();
             }
+        }
+
+        private bool IsExceedingBoxSize(double value)
+        {
+            const double minBoxDimension = 0.0001;
+            const double maxBoxDimension = 10.0;
+            return value <= minBoxDimension || value > maxBoxDimension;
         }
 
         private static UnitOfMeasure GetUnitOfMeasure(string[] units)

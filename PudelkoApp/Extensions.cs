@@ -9,9 +9,9 @@ namespace PudelkoApp
     {
         public static Pudelko Kompresuj(this Pudelko pudelko)
         {
-            //todo: szescian z prostopadloscianu o tej samej objetosci
-
-            return new Pudelko();
+            var volume = pudelko.Objetosc;
+            var edge = Math.Pow(volume, 1.0 / 3.0);
+            return new Pudelko(edge, edge, edge);
         }
     }
 }

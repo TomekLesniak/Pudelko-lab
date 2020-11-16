@@ -15,7 +15,13 @@ namespace PudelkoApp
 
             var x = pudelko + pudelko2;
             Console.WriteLine(x.Pole);
+            Console.WriteLine("===========");
+            Console.WriteLine("===========");
 
+            var a = new Pudelko(2.5, 1.212, 1.9);
+            Console.WriteLine(a.Objetosc);
+            var aCube = a.Kompresuj();
+            Console.WriteLine(aCube.Objetosc);
             //a: 11, expectedA: 0.011, b: 2599 => 2.599
             //var pudelko2 = new Pudelko(2.1, 3.05, 1);
         }

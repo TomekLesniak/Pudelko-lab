@@ -111,12 +111,18 @@ namespace PudelkoLib
         public static explicit operator Pudelko(ValueTuple<double, double, double> tuple) => new Pudelko(tuple.Item1, tuple.Item2, tuple.Item3, UnitOfMeasure.Millimeter);
         public static Pudelko operator +(Pudelko p1, Pudelko p2)
         {
-            var boxForBoth = new Pudelko(p1.Dlugosc + p2.Dlugosc, p1.Szerokosc + p2.Szerokosc, p1.Wysokosc + p2.Wysokosc);
-            //TODO: box for both logic
+            double[] firstBox = p1;
+            double[] secondBox = p2;
+            double[] forBoth = new double[3];
 
-            Console.WriteLine($"BoxForBoth: A{boxForBoth.Dlugosc}, B: {boxForBoth.Szerokosc}, C: {boxForBoth.Wysokosc}");
+            Array.Sort(firstBox);
+            Array.Sort(secondBox);
 
-            return boxForBoth;
+            forBoth[0] = firstBox[0] + secondBox[0];
+            forBoth[1] = secondBox[1] > firstBox[1] ? secondBox[1] : firstBox[1];
+            forBoth[2] = secondBox[2] > firstBox[2] ? secondBox[2] : firstBox[2];
+
+            return new Pudelko(forBoth[0], forBoth[1], forBoth[2]);
         }
 
 

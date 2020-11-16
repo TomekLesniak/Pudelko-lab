@@ -27,21 +27,22 @@ namespace PudelkoApp
 
             boxes.Sort(((box1, box2) =>
             {
-                if (Math.Abs(box1.Objetosc - box2.Objetosc) > 0.001)
-                    return box1.Objetosc > box2.Objetosc ? 1 : -1;
-                if (Math.Abs(box1.Pole - box2.Pole) > 0.001)
-                    return box1.Pole > box2.Pole ? 1 : -1;
+                if (Math.Abs(box1.Volume - box2.Volume) > 0.001)
+                    return box1.Volume > box2.Volume ? 1 : -1;
+                if (Math.Abs(box1.Area - box2.Area) > 0.001)
+                    return box1.Area > box2.Area ? 1 : -1;
 
                 return box1.A + box1.B + box1.C > box2.A + box2.B + box2.C
                     ? 1
                     : -1;
 
             }));
+
             Console.WriteLine("=============\nPOSORTOWANE:");
 
             foreach (var box in boxes)
             {
-                Console.WriteLine(box.ToString() + " obj: " + box.Objetosc + " pole: " + box.Pole);
+                Console.WriteLine(box.ToString() + " obj: " + box.Volume + " pole: " + box.Area);
             }
         }
     }

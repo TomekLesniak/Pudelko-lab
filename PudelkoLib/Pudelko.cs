@@ -8,47 +8,47 @@ namespace PudelkoLib
 {
     public sealed class Pudelko : IFormattable, IEquatable<Pudelko>, IEnumerable<double>
     {
-        private readonly double _dlugosc;
-        private readonly double _szerokosc;
-        private readonly double _wysokosc;
-        private readonly UnitOfMeasure _jednostkaMiary;
+        private readonly double _length;
+        private readonly double _width;
+        private readonly double _height;
+        private readonly UnitOfMeasure _unitOfMeasure;
 
-        public double A => Math.Round(_dlugosc, 4);
-        public double B => Math.Round(_szerokosc, 4);
-        public double C => Math.Round(_wysokosc, 4);
-        public double Objetosc => Math.Round(A * B * C, 9);
-        public double Pole =>
+        public double A => Math.Round(_length, 4);
+        public double B => Math.Round(_width, 4);
+        public double C => Math.Round(_height, 4);
+        public double Volume => Math.Round(A * B * C, 9);
+        public double Area =>
             Math.Round((2 * A * B) + (2 * A * C) + (2 * B * C), 6);
 
         public Pudelko()
         {
-            _dlugosc = 0.1;
-            _szerokosc = 0.1;
-            _wysokosc = 0.1;
-            _jednostkaMiary = UnitOfMeasure.Meter;
+            _length = 0.1;
+            _width = 0.1;
+            _height = 0.1;
+            _unitOfMeasure = UnitOfMeasure.Meter;
         }
 
-        public Pudelko(double dlugosc, UnitOfMeasure jednostkaMiary = UnitOfMeasure.Meter) : this()
+        public Pudelko(double length, UnitOfMeasure unitOfMeasure = UnitOfMeasure.Meter) : this()
         {
-            _dlugosc = UnitConverter.ToMeter(dlugosc, jednostkaMiary);
-            if (IsExceedingBoxSize(_dlugosc))
+            _length = UnitConverter.ToMeter(length, unitOfMeasure);
+            if (IsExceedingBoxSize(_length))
                 throw new ArgumentOutOfRangeException();
 
-            _jednostkaMiary = jednostkaMiary;
+            _unitOfMeasure = unitOfMeasure;
         }
 
-        public Pudelko(double dlugosc, double szerokosc, UnitOfMeasure jednostkaMiary = UnitOfMeasure.Meter) : this(dlugosc, jednostkaMiary)
+        public Pudelko(double length, double width, UnitOfMeasure unitOfMeasure = UnitOfMeasure.Meter) : this(length, unitOfMeasure)
         {
-            _szerokosc = UnitConverter.ToMeter(szerokosc, jednostkaMiary);
-            if (IsExceedingBoxSize(_szerokosc))
+            _width = UnitConverter.ToMeter(width, unitOfMeasure);
+            if (IsExceedingBoxSize(_width))
                 throw new ArgumentOutOfRangeException();
         }
 
-        public Pudelko(double dlugosc , double szerokosc, double wysokosc,
-            UnitOfMeasure jednostkaMiary = UnitOfMeasure.Meter) : this(dlugosc, szerokosc, jednostkaMiary)
+        public Pudelko(double length , double width, double height,
+            UnitOfMeasure unitOfMeasure = UnitOfMeasure.Meter) : this(length, width, unitOfMeasure)
         {
-            _wysokosc = UnitConverter.ToMeter(wysokosc, jednostkaMiary);
-            if (IsExceedingBoxSize(_wysokosc))
+            _height = UnitConverter.ToMeter(height, unitOfMeasure);
+            if (IsExceedingBoxSize(_height))
                 throw new ArgumentOutOfRangeException();
         }
 
@@ -59,13 +59,13 @@ namespace PudelkoLib
             if (ReferenceEquals(this, other))
                 return true;
 
-            double[] pudelkoJeden = {A, B, C};
-            double[] pudelkoDwa = {other.A, other.B, other.C};
-            Array.Sort(pudelkoJeden);
-            Array.Sort(pudelkoDwa);
-            for (var i = 0; i < pudelkoJeden.Length; i++)
+            double[] boxFirst = {A, B, C};
+            double[] boxSecond = {other.A, other.B, other.C};
+            Array.Sort(boxFirst);
+            Array.Sort(boxSecond);
+            for (var i = 0; i < boxFirst.Length; i++)
             {
-                if (Math.Abs(pudelkoJeden[i] - pudelkoDwa[i]) > 0.001)
+                if (Math.Abs(boxFirst[i] - boxSecond[i]) > 0.001)
                     return false;
             }
 
@@ -92,7 +92,7 @@ namespace PudelkoLib
 
         public override int GetHashCode()
         {
-            return (_dlugosc, _szerokosc, _wysokosc, _jednostkaMiary).GetHashCode();
+            return (_length, _width, _height, _unitOfMeasure).GetHashCode();
         }
 
         public static bool operator ==(Pudelko p1, Pudelko p2) => Equals(p1, p2);
@@ -153,35 +153,35 @@ namespace PudelkoLib
                 provider = CultureInfo.CurrentCulture;
 
             var unitFormat = "";
-            var dlugosc = 0.0;
-            var szerokosc = 0.0;
-            var wysokosc = 0.0;
+            var length = 0.0;
+            var width = 0.0;
+            var height = 0.0;
             switch (format)
             {
                 case "m":
                     unitFormat = "0.000";
-                    dlugosc = A;
-                    szerokosc = B;
-                    wysokosc = C;
+                    length = A;
+                    width = B;
+                    height = C;
                     break;
                 case "cm":
                     unitFormat = "##0.0";
-                    dlugosc = UnitConverter.ToCentimeter(_dlugosc);
-                    szerokosc = UnitConverter.ToCentimeter(_szerokosc);
-                    wysokosc = UnitConverter.ToCentimeter(_wysokosc);
+                    length = UnitConverter.ToCentimeter(_length);
+                    width = UnitConverter.ToCentimeter(_width);
+                    height = UnitConverter.ToCentimeter(_height);
                     break;
                 case "mm":
                     unitFormat = "####";
-                    dlugosc = UnitConverter.ToMillimeter(_dlugosc);
-                    szerokosc = UnitConverter.ToMillimeter(_szerokosc);
-                    wysokosc = UnitConverter.ToMillimeter(_wysokosc);
+                    length = UnitConverter.ToMillimeter(_length);
+                    width = UnitConverter.ToMillimeter(_width);
+                    height = UnitConverter.ToMillimeter(_height);
                     break;
                 default:
                     throw new FormatException();
             }
 
-            return $"{dlugosc.ToString(unitFormat, provider)} {format} × {szerokosc.ToString(unitFormat, provider)}" +
-                   $" {format} × {wysokosc.ToString(unitFormat, provider)} {format}";
+            return $"{length.ToString(unitFormat, provider)} {format} × {width.ToString(unitFormat, provider)}" +
+                   $" {format} × {height.ToString(unitFormat, provider)} {format}";
         }
 
         public static Pudelko Parse(string input)

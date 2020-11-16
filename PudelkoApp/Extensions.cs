@@ -9,7 +9,7 @@ namespace PudelkoApp
     {
         public static Pudelko Kompresuj(this Pudelko pudelko)
         {
-            var volume = pudelko.Objetosc;
+            var volume = pudelko.Volume;
             var edge = Math.Pow(volume, 1.0 / 3.0);
             return new Pudelko(edge, edge, edge);
         }

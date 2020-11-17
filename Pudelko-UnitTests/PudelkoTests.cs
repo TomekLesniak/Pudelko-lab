@@ -506,12 +506,192 @@ namespace Pudelko_UnitTests
         }
         #endregion
 
+
+
         #region Equals ===========================================
-        // ToDo
+
+        [TestMethod, TestCategory("Equals")]
+        public void Equals_OtherIsNull_ReturnsFalse()
+        {
+            var p1 = new Pudelko();
+            Pudelko p2 = null;
+
+            Assert.AreEqual(p1.Equals(p2), false);
+        }
+
+        [TestMethod, TestCategory("Equals")]
+        public void Equals_OtherIsReferenceToSameObject_ReturnsTrue()
+        {
+            var p1 = new Pudelko();
+            var p2 = p1;
+
+            Assert.AreEqual(p1.Equals(p2), true);
+        }
+
+        [DataTestMethod, TestCategory("Equals")]
+        [DataRow(1.0, 1.0, 1.0)]
+        [DataRow(3.1, 2.0, 5.6)]
+        [DataRow(3.0, 2.1, 5.56)]
+        [DataRow(2.98, 2.1, 5.5)]
+        [DataRow(3.0, 2.09, 5.5)]
+        [DataRow(3.1, 3.1, 3.1)]
+        public void Equals_OtherHasDifferentEdges_ReturnsFalse(double otherA, double otherB, double otherC)
+        {
+            var p1 = new Pudelko(3.0, 2.1, 5.5);
+            var p2 = new Pudelko(otherA, otherB, otherC);
+            
+
+            Assert.AreEqual(p1.Equals(p2), false);
+        }
+
+        [DataTestMethod, TestCategory("Equals")]
+        [DataRow(1.0, 2.0, 3.0)]
+        [DataRow(2.223, 1.999, 3.92)]
+        [DataRow(0.1, 0.12321, 0.92103)]
+        public void Equals_OtherHasSameEdges_ReturnsTrue(double a, double b, double c)
+        {
+            var p1 = new Pudelko(a, b, c);
+            var p2 = new Pudelko(a, b, c);
+
+            Assert.AreEqual(p1.Equals(p2), true);
+        }
+
         #endregion
 
         #region Operators overloading ===========================
-        // ToDo
+
+        [TestMethod, TestCategory("Operators")]
+        public void EqualsOperator_OtherIsNull_ReturnsFalse()
+        {
+            var p1 = new Pudelko();
+            Pudelko p2 = null;
+
+            Assert.AreEqual(p1 == p2, false);
+        }
+
+        [TestMethod, TestCategory("Operators")]
+        public void EqualsOperator_BothAreNulls_ReturnsTrue()
+        {
+            Pudelko p1 = null;
+            Pudelko p2 = null;
+
+            Assert.AreEqual(p1 == p2, true);
+        }
+
+        [TestMethod, TestCategory("Operators")]
+        public void EqualsOperator_FirstIsNull_ReturnsFalse()
+        {
+            Pudelko p1 = null;
+            var p2 = new Pudelko();
+
+            Assert.AreEqual(p1 == p2, false);
+        }
+
+        [TestMethod, TestCategory("Operators")]
+        public void EqualsOperator_OtherIsNotObjectOfTypePudelko_ReturnsFalse()
+        {
+            var p1 = new Pudelko();
+            var p2 = new object();
+
+            Assert.AreEqual(p1 == p2, false);
+        }
+
+        [TestMethod, TestCategory("Operators")]
+        public void EqualsOperator_OtherIsReferenceToSameObject_ReturnsTrue()
+        {
+            var p1 = new Pudelko();
+            var p2 = p1;
+
+            Assert.AreEqual(p1 == p2, true);
+        }
+
+        [TestMethod, TestCategory("Operators")]
+        public void EqualsOperator_EdgesAreTheSame_ReturnsTrue()
+        {
+            var p1 = new Pudelko(1.5, 2.2, 3.2);
+            var p2 = new Pudelko(1.5, 2.2, 3.2);
+
+            Assert.AreEqual(p1 == p2, true);
+        }
+
+        [TestMethod, TestCategory("Operators")]
+        public void EqualsOperator_EdgesAreNotTheSame_ReturnsFalse()
+        {
+            var p1 = new Pudelko(1.5, 2.2, 3.2);
+            var p2 = new Pudelko(2, 2, 2);
+
+            Assert.AreEqual(p1 == p2, false);
+        }
+
+        [TestMethod, TestCategory("Operators")]
+        public void NotEqualsOperator_EdgesAreTheSame_ReturnsFalse()
+        {
+            var p1 = new Pudelko(1.5, 2.2, 3.2);
+            var p2 = new Pudelko(1.5, 2.2, 3.2);
+
+            Assert.AreEqual(p1 != p2, false);
+        }
+
+        [TestMethod, TestCategory("Operators")]
+        public void NotEqualsOperator_EdgesAreNotTheSame_ReturnsTrue()
+        {
+            var p1 = new Pudelko(1.5, 2.2, 3.2);
+            var p2 = new Pudelko(2, 2, 2);
+
+            Assert.AreEqual(p1 != p2, true);
+        }
+
+        [DataTestMethod, TestCategory("Operators")]
+        [DataRow(2,2, 2, 4, 2, 2)]
+        [DataRow(1, 5, 5, 3, 5, 5)]
+        [DataRow(0.1, 1.99, 2.01, 2.1, 2, 2.01)]
+        [DataRow(2.01, 2.01, 2.01, 4.01, 2.01, 2.01)]
+        [DataRow(0.1, 0.1, 0.1, 2.1, 2, 2)]
+        public void PlusOperator_InMeters_ReturnsSmallestBoxThatCanContainBoth(double otherA, double otherB, double otherC,
+            double expectedA, double expectedB, double expectedC)
+        {
+            var p1 = new Pudelko(2, 2, 2);
+            var p2 = new Pudelko(otherA, otherB, otherC);
+
+            var boxForBoth = p1 + p2;
+
+            AssertPudelko(boxForBoth, expectedA, expectedB, expectedC);
+        }
+
+        [DataTestMethod, TestCategory("Operators")]
+        [DataRow(200, 200, 200, 4, 2, 2)]
+        [DataRow(100, 500, 500, 3, 5, 5)]
+        [DataRow(10, 199, 201, 2.1, 2, 2.01)]
+        [DataRow(201, 201, 201, 4.01, 2.01, 2.01)]
+        [DataRow(10, 10, 10, 2.1, 2, 2)]
+        public void PlusOperator_InCentimeters_ReturnsSmallestBoxThatCanContainBoth(double otherA, double otherB, double otherC,
+            double expectedA, double expectedB, double expectedC)
+        {
+            var p1 = new Pudelko(200, 200, 200, UnitOfMeasure.Centimeter);
+            var p2 = new Pudelko(otherA, otherB, otherC, UnitOfMeasure.Centimeter);
+
+            var boxForBoth = p1 + p2;
+
+            AssertPudelko(boxForBoth, expectedA, expectedB, expectedC);
+        }
+
+        [DataTestMethod, TestCategory("Operators")]
+        [DataRow(2000, 2000, 2000, 4, 2, 2)]
+        [DataRow(1000, 5000, 5000, 3, 5, 5)]
+        [DataRow(100, 1990, 2010, 2.1, 2, 2.01)]
+        [DataRow(2010, 2010, 2010, 4.01, 2.01, 2.01)]
+        [DataRow(100, 100, 100, 2.1, 2, 2)]
+        public void PlusOperator_InMillimeters_ReturnsSmallestBoxThatCanContainBoth(double otherA, double otherB, double otherC,
+            double expectedA, double expectedB, double expectedC)
+        {
+            var p1 = new Pudelko(2000, 2000, 2000, UnitOfMeasure.Millimeter);
+            var p2 = new Pudelko(otherA, otherB, otherC, UnitOfMeasure.Millimeter);
+
+            var boxForBoth = p1 + p2;
+
+            AssertPudelko(boxForBoth, expectedA, expectedB, expectedC);
+        }
+
         #endregion
 
         #region Conversions =====================================
@@ -564,6 +744,41 @@ namespace Pudelko_UnitTests
         #endregion
 
         #region Parsing =========================================
+
+        [DataTestMethod, TestCategory("Parsing")]
+        [DataRow("2.0 m × 1.0 m3.0 m")]
+        [DataRow("2 3 2")]
+        [DataRow("2 m x 3 m x 2 m")]
+        [DataRow("2.0 m × 1.0 mm × 3.0 cm")]
+        [ExpectedException(typeof(FormatException))]
+        public void Parse_InvalidInput_ThrowsFormatException(string input)
+        {
+            var p = Pudelko.Parse(input);
+        }
+
+        [TestMethod, TestCategory("Parsing")]
+        public void Parse_InMeters_ReturnsNewPudelkoInMeters()
+        {
+            var p = Pudelko.Parse("2.0 m × 1.0 m × 3.0 m");
+
+            AssertPudelko(p, 2, 1, 3);
+        }
+
+        [TestMethod, TestCategory("Parsing")]
+        public void Parse_InCentimeters_ReturnsNewPudelkoInCentimeters()
+        {
+            var p = Pudelko.Parse("200 cm × 100 cm × 300 cm");
+
+            AssertPudelko(p, 2, 1, 3);
+        }
+
+        [TestMethod, TestCategory("Parsing")]
+        public void Parse_InMillimeters_ReturnsNewPudelkoInMillimeters()
+        {
+            var p = Pudelko.Parse("2000 mm × 1000 mm × 3000 mm");
+
+            AssertPudelko(p, 2, 1, 3);
+        }
 
         #endregion
 

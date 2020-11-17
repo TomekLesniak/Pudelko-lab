@@ -81,7 +81,7 @@ namespace PudelkoLib
 
         public static bool Equals(Pudelko p1, Pudelko p2)
         {
-            if (p1 == null && p2 == null)
+            if (p1 is null && p2 is null)
                 return true;
             if (p1 is null) 
                 return false;
@@ -190,6 +190,8 @@ namespace PudelkoLib
             {
                 double[] dimensions = {double.Parse(parts[0]), double.Parse(parts[3]), double.Parse(parts[6])};
                 string[] units = {parts[1], parts[4], parts[7]};
+                if (parts[2] != "×" && parts[5] != "×")
+                    throw new FormatException();
                 var unitOfMeasure = GetUnitOfMeasure(units);
                 return new Pudelko(dimensions[0], dimensions[1], dimensions[2], unitOfMeasure);
             }

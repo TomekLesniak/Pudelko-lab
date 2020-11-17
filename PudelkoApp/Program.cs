@@ -10,6 +10,7 @@ namespace PudelkoApp
         {
             var test1 = new Pudelko(10,5,5);
             var test2 = new Pudelko(7,5,1);
+            Console.WriteLine(test1 == test2);
             var test3 = test1 + test2;
             Console.WriteLine(test3.ToString());
 

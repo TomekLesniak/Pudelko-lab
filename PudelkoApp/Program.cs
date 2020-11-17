@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using PudelkoLib;
 
 namespace PudelkoApp
@@ -14,9 +15,37 @@ namespace PudelkoApp
             Console.WriteLine($"{test1.ToString()} != {test2.ToString()} : {test1 != test2}");
             var test3 = test1 + test2;
             Console.WriteLine($"Po dodaniu: {test3.ToString()}");
+            Console.WriteLine($"W centymetrach: {test3.ToString("cm")}");
+            Console.WriteLine($"W milimetrach: {test3.ToString("mm")}");
 
+            Console.WriteLine("============\nKonwersja");
+
+            double[] test3Arr = test3;
+            Console.WriteLine($"Jawna: Typ zwracany => {test3Arr}");
+
+            var test4 = (Pudelko) (1000, 2000, 3000);
+            Console.WriteLine($"Niejawna: W milimetrach => {test4.ToString("mm")}");
+
+
+            Console.WriteLine("============\nIndexer");
+
+            var indexer = new Pudelko(0.1,1,2);
+
+            Console.WriteLine($"Index 0 => {indexer[0]}");
+            Console.WriteLine($"Index 1 => {indexer[1]}");
+            Console.WriteLine($"Index 2 => {indexer[2]}");
+            try
+            {
+                Console.WriteLine(indexer[3]);
+            }
+            catch(ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine($"Index 3 => {ex}");
+            }
 
             Console.WriteLine("============");
+
+
 
             var toCompress = new Pudelko(2, 3, 4);
             var afterCompress = toCompress.Kompresuj();
@@ -29,7 +58,7 @@ namespace PudelkoApp
 
             Console.WriteLine("============");
 
-
+            var p0 = new Pudelko();
             var p1 = new Pudelko(1);
             var p2 = new Pudelko(2, 3);
             var p3 = new Pudelko(400, 100, 500, UnitOfMeasure.Centimeter);
@@ -41,7 +70,7 @@ namespace PudelkoApp
             var p9 = p7 + p8;
             var p10 = Pudelko.Parse("5 m × 3 m × 2 m");
 
-            var boxes = new List<Pudelko> {p1, p2, p3, p4, p5, p6, p7, p8, p9, p10};
+            var boxes = new List<Pudelko> {p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10};
 
             Console.WriteLine("NIEPOSORTOWANE:");
             foreach (var box in boxes)

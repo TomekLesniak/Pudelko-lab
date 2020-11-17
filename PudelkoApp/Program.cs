@@ -10,10 +10,13 @@ namespace PudelkoApp
         {
             var test1 = new Pudelko(10,5,5);
             var test2 = new Pudelko(7,5,1);
-            Console.WriteLine(test1 == test2);
+            Console.WriteLine($"{test1.ToString()} == {test2.ToString()} : {test1 == test2}");
+            Console.WriteLine($"{test1.ToString()} != {test2.ToString()} : {test1 != test2}");
             var test3 = test1 + test2;
-            Console.WriteLine(test3.ToString());
+            Console.WriteLine($"After addition: {test3.ToString()}");
 
+
+            Console.WriteLine("============");
 
             var p1 = new Pudelko(1);
             var p2 = new Pudelko(2, 3);
@@ -24,8 +27,9 @@ namespace PudelkoApp
             var p7 = new Pudelko(1, 5, 10);
             var p8 = new Pudelko(2, 5, 5);
             var p9 = p7 + p8;
+            var p10 = Pudelko.Parse("5 m × 3 m × 2 m");
 
-            var boxes = new List<Pudelko> {p1, p2, p3, p4, p5, p6, p7, p8, p9};
+            var boxes = new List<Pudelko> {p1, p2, p3, p4, p5, p6, p7, p8, p9, p10};
 
             Console.WriteLine("NIEPOSORTOWANE:");
             foreach (var box in boxes)

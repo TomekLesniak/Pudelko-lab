@@ -13,10 +13,22 @@ namespace PudelkoApp
             Console.WriteLine($"{test1.ToString()} == {test2.ToString()} : {test1 == test2}");
             Console.WriteLine($"{test1.ToString()} != {test2.ToString()} : {test1 != test2}");
             var test3 = test1 + test2;
-            Console.WriteLine($"After addition: {test3.ToString()}");
+            Console.WriteLine($"Po dodaniu: {test3.ToString()}");
 
 
             Console.WriteLine("============");
+
+            var toCompress = new Pudelko(2, 3, 4);
+            var afterCompress = toCompress.Kompresuj();
+
+
+            Console.WriteLine($"Przed kompresja: objetosc = {toCompress.Volume}, wymiary = {toCompress.ToString()}");
+            Console.WriteLine($"Po kompresji: objetosc = {Math.Round(afterCompress.Volume, 3)}, wymiary = {afterCompress.ToString()}");
+
+
+
+            Console.WriteLine("============");
+
 
             var p1 = new Pudelko(1);
             var p2 = new Pudelko(2, 3);

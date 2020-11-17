@@ -16,7 +16,7 @@ namespace PudelkoLib
         public double A => Math.Round(_length, 4);
         public double B => Math.Round(_width, 4);
         public double C => Math.Round(_height, 4);
-        public double Volume => Math.Round(A * B * C, 9);
+        public double Volume => Math.Round(A * B * C, 10);
         public double Area => Math.Round((2 * A * B) + (2 * A * C) + (2 * B * C), 6);
 
         public Pudelko()

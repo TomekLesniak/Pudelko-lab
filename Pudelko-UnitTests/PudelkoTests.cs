@@ -439,35 +439,70 @@ namespace Pudelko_UnitTests
         [DataRow(1.0, 1.0, 1.0, 6.0)]
         [DataRow(2.5, 1.2, 2.3, 23.02)]
         [DataRow(1.3, 9.92, 3.32, 100.2928)]
-        public void Area_DataInMeters_ReturnsCalculatedAreaInMeters(double a, double b, double c, double expectedArea)
+        public void Area_InMeters_ReturnsCalculatedAreaInMeters(double a, double b, double c, double expectedArea)
         {
             var p = new Pudelko(a, b, c);
 
-            Assert.AreEqual(p.Area, expectedArea);
+            Assert.AreEqual(p.Area, expectedArea, delta: accuracy);
         }
 
         [DataTestMethod, TestCategory("Calculated properties")]
         [DataRow(100.0, 200.0, 300.0, 22.0)]
         [DataRow(250.0, 120.0, 230.0, 23.02)]
         [DataRow(130.0, 992.0, 332.0, 100.2928)]
-        public void Area_DataInCentimeters_ReturnsCalculatedAreaInMeters(double a, double b, double c,
+        public void Area_InCentimeters_ReturnsCalculatedAreaInMeters(double a, double b, double c,
             double expectedArea)
         {
             var p = new Pudelko(a, b, c, UnitOfMeasure.Centimeter);
 
-            Assert.AreEqual(p.Area, expectedArea);
+            Assert.AreEqual(p.Area, expectedArea, delta: accuracy);
         }
 
         [DataTestMethod, TestCategory("Calculated properties")]
         [DataRow(1000.0, 2000.0, 3000.0, 22.0)]
         [DataRow(2500.0, 1200.0, 2300.0, 23.02)]
         [DataRow(1300.0, 9920.0, 3320.0, 100.2928)]
-        public void Area_DataInMillimeters_ReturnsCalculatedAreaInMeters(double a, double b, double c,
+        public void Area_InMillimeters_ReturnsCalculatedAreaInMeters(double a, double b, double c,
             double expectedArea)
         {
             var p = new Pudelko(a, b, c, UnitOfMeasure.Millimeter);
 
-            Assert.AreEqual(p.Area, expectedArea);
+            Assert.AreEqual(p.Area, expectedArea, delta: accuracy);
+        }
+
+        [DataTestMethod, TestCategory("Calculated properties")]
+        [DataRow(2.0, 2.0, 2.0, 8.0)]
+        [DataRow(1.5, 2.9, 3.1, 13.485)]
+        [DataRow(9.9, 1.23, 0.1, 1.2177)]
+        public void Volume_InMeters_ReturnsCalculatedVolumeInMeters(double a, double b, double c, double expectedVolume)
+        {
+            var p = new Pudelko(a, b, c);
+
+            Assert.AreEqual(p.Volume, expectedVolume, delta: accuracy);
+        }
+
+        [DataTestMethod, TestCategory("Calculated properties")]
+        [DataRow(200, 200, 200, 8.0)]
+        [DataRow(150, 290, 310, 13.485)]
+        [DataRow(990, 123, 10, 1.2177)]
+        public void Volume_InCentimeters_ReturnsCalculatedVolumeInMeters(double a, double b, double c,
+            double expectedVolume)
+        {
+            var p = new Pudelko(a, b, c, UnitOfMeasure.Centimeter);
+
+            Assert.AreEqual(p.Volume, expectedVolume, delta: accuracy);
+        }
+
+        [DataTestMethod, TestCategory("Calculated properties")]
+        [DataRow(2000, 2000, 2000, 8.0)]
+        [DataRow(1500, 2900, 3100, 13.485)]
+        [DataRow(9900, 1230, 100, 1.2177)]
+        public void Volume_InMillimeters_ReturnsCalculatedVolumeInMeters(double a, double b, double c,
+            double expectedVolume)
+        {
+            var p = new Pudelko(a, b, c, UnitOfMeasure.Millimeter);
+
+            Assert.AreEqual(p.Volume, expectedVolume, delta: accuracy);
         }
         #endregion
 
